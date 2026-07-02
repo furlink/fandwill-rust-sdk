@@ -14,11 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+      - run: rustup target add wasm32-unknown-unknown
       - name: Format
         run: cargo fmt --all -- --check
       - name: Clippy
         run: cargo clippy -- -D warnings
       - name: Test
         run: cargo test --all
+      - name: Check SDK (wasm)
+        run: cargo check --target wasm32-unknown-unknown
       - name: Publish dry-run
         run: cargo publish --dry-run

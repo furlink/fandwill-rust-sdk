@@ -1,0 +1,21 @@
+[package]
+name = "fandwill-sdk"
+
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+version.workspace = true
+
+description = "Async HTTP client for the Fandwill platform API (native and WASM)."
+readme = "README.md"
+keywords = ["fandwill", "api", "client", "reqwest"]
+categories = ["api-bindings", "web-programming::http-client"]
+
+[dependencies]
+fandwill-vo = { path = "../fandwill-vo", default-features = false }
+reqwest = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+url = { workspace = true }

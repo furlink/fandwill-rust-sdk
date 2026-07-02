@@ -5,7 +5,6 @@ authors.workspace = true
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
-rust-version.workspace = true
 version.workspace = true
 
 description = "Serde, garde, and utoipa value objects for the Fandwill platform API."
@@ -27,3 +26,4 @@ utoipa = { workspace = true, optional = true }
 
 [dev-dependencies]
 serde_json = "1.0"
+

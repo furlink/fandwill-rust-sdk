@@ -14,9 +14,10 @@ Treat **`fandwill-vo` as the source of truth for payload shapes** in Rust. Keep 
 
 ## Crates
 
-| Crate                               | crates.io     | Description                            |
-| ----------------------------------- | ------------- | -------------------------------------- |
-| [`fandwill-vo`](crates/fandwill-vo) | `fandwill-vo` | Serde, garde, and utoipa value objects |
+| Crate                                             | crates.io      | Description                            |
+| ------------------------------------------------- | -------------- | -------------------------------------- |
+| [`fandwill-vo`](./crates/fandwill-vo/README.md)   | `fandwill-vo`  | Serde, garde, and utoipa value objects |
+| [`fandwill-sdk`](./crates/fandwill-sdk/README.md) | `fandwill-sdk` | Async HTTP client (native + WASM)      |
 
 ```toml
 [dependencies]
@@ -37,4 +38,3 @@ at your option.
 ## Trademark
 
 **Fandwill** is a brand of Furlink. This license does not grant permission to use Fandwill trademarks, logos, or branding except as needed to describe that your software works with the Fandwill platform. Do not imply endorsement or an official relationship without written permission from Furlink.
-
