@@ -5,6 +5,10 @@ members = ["crates/fandwill-vo"]
 [workspace.package]
 version = "0.1.0"
 edition = "2024"
+rust-version = "1.85"
+authors = ["Furlink"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/furlink/fandwil-rust-sdk"
 
 [workspace.dependencies]
 chrono = { version = "0.4", features = ["serde"] }
@@ -14,4 +18,3 @@ url = { version = "2.5", features = ["serde"] }
 utoipa = { version = "5", features = ["chrono", "url"] }
 
 fandwill-vo = { path = "./crates/fandwill-vo/" }
-

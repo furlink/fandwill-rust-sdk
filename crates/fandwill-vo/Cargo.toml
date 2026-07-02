@@ -1,7 +1,17 @@
 [package]
 name = "fandwill-vo"
-version.workspace = true
+
+authors.workspace = true
 edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+description = "Serde, garde, and utoipa value objects for the Fandwill platform API."
+readme = "README.md"
+keywords = ["fandwill", "serde", "dto", "utoipa", "garde"]
+categories = ["api-bindings", "data-structures"]
 
 [dependencies]
 serde.workspace = true
