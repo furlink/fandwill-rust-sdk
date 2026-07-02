@@ -12,6 +12,9 @@ readme = "README.md"
 keywords = ["fandwill", "api", "client", "reqwest"]
 categories = ["api-bindings", "web-programming::http-client"]
 
+[features]
+frb = []
+
 [dependencies]
 reqwest = { workspace = true }
 serde = { workspace = true }

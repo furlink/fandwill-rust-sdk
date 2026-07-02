@@ -10,7 +10,7 @@ use crate::response::PagedResponse;
 impl FandwillClient {
     pub async fn get_listings(
         &self,
-        params: &ListingsQuery<'_>,
+        params: &ListingsQuery,
     ) -> Result<PagedResponse<ListingsVO>, Error> {
         let builder = self.request(Method::GET, "listings")?.query(params);
         self.send_json(builder).await

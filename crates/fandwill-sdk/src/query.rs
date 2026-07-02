@@ -8,18 +8,22 @@ pub enum SearchMode {
     Semantic,
 }
 
-#[derive(Debug, Default, Serialize)]
-pub struct ListingsQuery<'a> {
+#[derive(Debug, Default, Clone, Serialize)]
+pub struct ListingsQuery {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page: Option<i32>,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i32>,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mode: Option<SearchMode>,
+
     /// Full-text search query (required when mode=Fts)
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub by: Option<&'a str>,
+    pub by: Option<String>,
+
     /// Semantic search query (required when mode=Semantic)
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub query: Option<&'a str>,
+    pub query: Option<String>,
 }

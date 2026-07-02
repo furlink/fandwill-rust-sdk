@@ -10,12 +10,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **`fandwill-sdk`** (workspace) — async HTTP client crate built on `reqwest`.
-  - `FandwillClient` with configurable base URL and shared `request` / JSON response helpers.
-  - `Auth` for **API key** (`X-Api-Key`) and **JWT** (`Authorization: Bearer`), plus
-    `with_auth`, `with_api_key`, and `with_jwt` on the client.
-  - `SdkError` (`thiserror`) for transport, URL, non-success HTTP status, and JSON errors.
-  - Re-exports `fandwill_vo` so apps can depend on `fandwill-sdk` only for types and client.
-  - Crate README and workspace membership; root README lists the SDK crate.
+  - `FandwillClient` with configurable base URL, trailing `/` auto-append.
+  - `Auth` for **API key** (`X-Api-Key`) and **JWT** (`Authorization: Bearer`).
+  - Endpoint groups: `root`, `sign_up`, `sign_in` (auth); `get_listings`,
+    `get_listing`, `add_listing`, `update_listing`, `delete_listing`,
+    `bookmark_listing`, `unbookmark_listing`, `get_listing_versions` (listings).
+  - `send_json<T>()` / `send_empty()` helpers for flattened API response handling.
+  - `Error` (`thiserror`) for `Request`, `InvalidUrl`, `Status`, `Json` errors.
+  - `ListingsQuery` / `SearchMode` for paginated and search query parameters.
+  - `PagedResponse<T>` / `PageInfo` for paginated endpoint responses.
+  - `frb` feature flag (empty, reserved for Flutter Rust Bridge integration).
+  - Re-exports `fandwill_vo` so apps can depend on `fandwill-sdk` only.
+  - `AGENTS.md` agent guide with CI commands and key development facts.
+
+- **`fandwill-vo`** — `meta::RootResponse` with `Deserialize` (matches published contract).
+
+### Changed
+
+- **`fandwill-sdk`** — `Error` variants now use `String`/`u16` instead of
+  `reqwest::StatusCode`, `url::ParseError`, `serde_json::Error`, etc., making
+  the error type compatible with Flutter Rust Bridge codegen.
+- **`fandwill-sdk`** — `ListingsQuery` lifetime removed (`&str` → `String`),
+  added `Clone` derive for FRB compatibility.
 
 ## [0.1.0] - 2026-07-02
 

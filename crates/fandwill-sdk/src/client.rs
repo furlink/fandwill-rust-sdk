@@ -14,7 +14,9 @@ pub struct FandwillClient {
 
 impl FandwillClient {
     pub fn new(base_url: impl reqwest::IntoUrl) -> Result<Self, Error> {
-        let mut base_url = base_url.into_url().map_err(Error::Request)?;
+        let mut base_url = base_url
+            .into_url()
+            .map_err(|e| Error::Request(e.to_string()))?;
         if !base_url.path().ends_with('/') {
             let path = format!("{}/", base_url.path());
             base_url.set_path(&path);
@@ -60,7 +62,10 @@ impl FandwillClient {
         let status = response.status();
         let body = response.text().await?;
         if !status.is_success() {
-            return Err(Error::Status { status, body });
+            return Err(Error::Status {
+                status: status.as_u16(),
+                body,
+            });
         }
         Ok(serde_json::from_str(&body)?)
     }
@@ -70,7 +75,10 @@ impl FandwillClient {
         let status = response.status();
         if !status.is_success() {
             let body = response.text().await?;
-            return Err(Error::Status { status, body });
+            return Err(Error::Status {
+                status: status.as_u16(),
+                body,
+            });
         }
         Ok(())
     }
