@@ -1,0 +1,11 @@
+[package]
+name = "fandwill-vo"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+serde.workspace = true
+utoipa.workspace = true
+chrono.workspace = true
+url.workspace = true
+garde.workspace = true
