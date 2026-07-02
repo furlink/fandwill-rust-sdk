@@ -13,9 +13,10 @@ keywords = ["fandwill", "api", "client", "reqwest"]
 categories = ["api-bindings", "web-programming::http-client"]
 
 [features]
-frb = []
+frb = ["dep:chrono"]
 
 [dependencies]
+chrono = { workspace = true, optional = true }
 reqwest = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
