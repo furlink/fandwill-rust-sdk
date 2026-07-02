@@ -5,11 +5,16 @@
 
 mod auth;
 mod client;
+mod endpoints;
 mod error;
+mod query;
+mod response;
 
 pub use auth::Auth;
 pub use client::FandwillClient;
-pub use error::SdkError;
+pub use error::Error;
+pub use query::{ListingsQuery, SearchMode};
+pub use response::{PageInfo, PagedResponse};
 
 /// Request/response types for the Fandwill API (re-exported from `fandwill-vo`).
 pub use fandwill_vo;

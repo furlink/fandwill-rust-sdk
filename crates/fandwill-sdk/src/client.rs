@@ -3,21 +3,24 @@ use serde::de::DeserializeOwned;
 use url::Url;
 
 use crate::auth::Auth;
-use crate::error::SdkError;
+use crate::error::Error;
 
 #[derive(Clone)]
-#[allow(dead_code)]
 pub struct FandwillClient {
     pub(crate) http: Client,
     pub(crate) base_url: Url,
     pub(crate) auth: Option<Auth>,
 }
 
-#[allow(dead_code)]
 impl FandwillClient {
-    pub fn new(base_url: impl reqwest::IntoUrl) -> Result<Self, SdkError> {
-        let base_url = base_url.into_url().map_err(SdkError::Request)?;
+    pub fn new(base_url: impl reqwest::IntoUrl) -> Result<Self, Error> {
+        let mut base_url = base_url.into_url().map_err(Error::Request)?;
+        if !base_url.path().ends_with('/') {
+            let path = format!("{}/", base_url.path());
+            base_url.set_path(&path);
+        }
         let http = Client::builder().build()?;
+
         Ok(Self {
             http,
             base_url,
@@ -35,7 +38,7 @@ impl FandwillClient {
         self
     }
 
-    pub(crate) fn request(&self, method: Method, path: &str) -> Result<RequestBuilder, SdkError> {
+    pub(crate) fn request(&self, method: Method, path: &str) -> Result<RequestBuilder, Error> {
         let url = self.base_url.join(path)?;
         let mut builder = self.http.request(method, url);
 
@@ -52,13 +55,23 @@ impl FandwillClient {
     pub(crate) async fn send_json<T: DeserializeOwned>(
         &self,
         builder: RequestBuilder,
-    ) -> Result<T, SdkError> {
+    ) -> Result<T, Error> {
         let response = builder.send().await?;
         let status = response.status();
         let body = response.text().await?;
         if !status.is_success() {
-            return Err(SdkError::Status { status, body });
+            return Err(Error::Status { status, body });
         }
         Ok(serde_json::from_str(&body)?)
+    }
+
+    pub(crate) async fn send_empty(&self, builder: RequestBuilder) -> Result<(), Error> {
+        let response = builder.send().await?;
+        let status = response.status();
+        if !status.is_success() {
+            let body = response.text().await?;
+            return Err(Error::Status { status, body });
+        }
+        Ok(())
     }
 }

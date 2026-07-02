@@ -1,7 +1,7 @@
 use reqwest::StatusCode;
 
 #[derive(Debug, thiserror::Error)]
-pub enum SdkError {
+pub enum Error {
     #[error("HTTP request failed: {0}")]
     Request(#[from] reqwest::Error),
 
