@@ -1,8 +1,8 @@
 use chrono::{DateTime, FixedOffset};
 use serde::Serialize;
-use utoipa::ToSchema;
 
-#[derive(Debug, ToSchema, Serialize)]
+#[derive(Debug, Serialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub struct RootResponse {
     pub start_at: DateTime<FixedOffset>,
     pub version: String,

@@ -11,6 +11,17 @@ Use the **same crate version** in the Fandwill backend, future Rust SDK, and any
 fandwill-vo = "0.1"
 ```
 
+Serde only (no validation or OpenAPI derives):
+
+```toml
+fandwill-vo = { version = "0.1", default-features = false }
+```
+
+| Feature  | Default | Description                            |
+| -------- | ------- | -------------------------------------- |
+| `garde`  | yes     | Field validation via `garde::Validate` |
+| `utoipa` | yes     | OpenAPI schemas via `utoipa::ToSchema` |
+
 ## Modules
 
 | Module      | Types (examples)                                                       |
@@ -56,4 +67,3 @@ Licensed under either of Apache License, Version 2.0 or MIT license, at your opt
 ## Trademark
 
 **Fandwill** is a brand of Furlink. This license does not grant permission to use Fandwill trademarks, logos, or branding except as needed to describe interoperability with the Fandwill platform. Do not imply endorsement or an official relationship without written permission from Furlink.
-

@@ -1,10 +1,10 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use utoipa::ToSchema;
 
 use crate::resources::ResourceVO;
 
-#[derive(Debug, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub struct CreateListingVO {
     pub title: String,
     pub description: String,
@@ -12,7 +12,8 @@ pub struct CreateListingVO {
     pub resources: Vec<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub struct UpdateListingVO {
     pub title: String,
     pub description: String,
@@ -20,7 +21,8 @@ pub struct UpdateListingVO {
     pub resources: Vec<String>,
 }
 
-#[derive(Debug, ToSchema, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub struct ListingsVO {
     pub id: String,
     pub created_by: Option<String>,
@@ -32,7 +34,8 @@ pub struct ListingsVO {
     pub updated_at: DateTime<Utc>,
 }
 
-#[derive(Debug, ToSchema, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub struct ListingVersionVO {
     pub id: String,
     pub title: String,

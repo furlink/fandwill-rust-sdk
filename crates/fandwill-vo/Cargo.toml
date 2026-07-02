@@ -13,9 +13,17 @@ readme = "README.md"
 keywords = ["fandwill", "serde", "dto", "utoipa", "garde"]
 categories = ["api-bindings", "data-structures"]
 
+[features]
+default = ["garde", "utoipa"]
+garde = ["dep:garde"]
+utoipa = ["dep:utoipa"]
+
 [dependencies]
 serde.workspace = true
-utoipa.workspace = true
 chrono.workspace = true
 url.workspace = true
-garde.workspace = true
+garde = { workspace = true, optional = true }
+utoipa = { workspace = true, optional = true }
+
+[dev-dependencies]
+serde_json = "1.0"

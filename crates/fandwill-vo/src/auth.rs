@@ -1,53 +1,57 @@
-use garde::Validate;
 use serde::{Deserialize, Serialize};
-use utoipa::ToSchema;
 
-#[derive(Debug, Serialize, Deserialize, ToSchema, Validate)]
+#[derive(Debug, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[cfg_attr(feature = "garde", derive(garde::Validate))]
 #[serde(deny_unknown_fields)]
 pub struct SignUpVO {
-    #[garde(email)]
-    #[schema(example = "user@example.com")]
+    #[cfg_attr(feature = "garde", garde(email))]
+    #[cfg_attr(feature = "utoipa", schema(example = "user@example.com"))]
     pub email: String,
 
-    #[garde(length(min = 8))]
-    #[schema(example = "password123")]
+    #[cfg_attr(feature = "garde", garde(length(min = 8)))]
+    #[cfg_attr(feature = "utoipa", schema(example = "password123"))]
     pub password: String,
 
-    #[garde(skip)]
-    #[schema(example = "TestUser")]
+    #[cfg_attr(feature = "garde", garde(skip))]
+    #[cfg_attr(feature = "utoipa", schema(example = "TestUser"))]
     pub nickname: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[serde(deny_unknown_fields)]
 pub struct SignUpResponseVO {
     pub id: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, ToSchema, Validate)]
+#[derive(Debug, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[cfg_attr(feature = "garde", derive(garde::Validate))]
 #[serde(untagged, deny_unknown_fields)]
 pub enum SignInVO {
     Email {
-        #[garde(email)]
-        #[schema(example = "user@example.com")]
+        #[cfg_attr(feature = "garde", garde(email))]
+        #[cfg_attr(feature = "utoipa", schema(example = "user@example.com"))]
         email: String,
 
-        #[garde(length(min = 8))]
-        #[schema(example = "password123")]
+        #[cfg_attr(feature = "garde", garde(length(min = 8)))]
+        #[cfg_attr(feature = "utoipa", schema(example = "password123"))]
         password: String,
     },
     Phone {
-        #[garde(phone_number)]
-        #[schema(example = "+861380000000")]
+        #[cfg_attr(feature = "garde", garde(phone_number))]
+        #[cfg_attr(feature = "utoipa", schema(example = "+861380000000"))]
         phone: String,
 
-        #[garde(length(min = 8))]
-        #[schema(example = "password123")]
+        #[cfg_attr(feature = "garde", garde(length(min = 8)))]
+        #[cfg_attr(feature = "utoipa", schema(example = "password123"))]
         password: String,
     },
 }
 
-#[derive(Debug, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[serde(deny_unknown_fields)]
 pub struct SignInResponseVO {
     pub token: String,
