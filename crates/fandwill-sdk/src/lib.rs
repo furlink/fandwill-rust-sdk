@@ -7,16 +7,12 @@ mod auth;
 mod client;
 mod endpoints;
 mod error;
-mod macros;
 mod query;
 mod response;
 
 pub use auth::Auth;
 pub use client::FandwillClient;
 pub use error::Error;
-
-#[cfg(feature = "frb")]
-pub use error::FrbError;
 pub use query::{ListingsQuery, SearchMode};
 pub use response::{PageInfo, PagedResponse};
 

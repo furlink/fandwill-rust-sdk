@@ -12,15 +12,11 @@ readme = "README.md"
 keywords = ["fandwill", "api", "client", "reqwest"]
 categories = ["api-bindings", "web-programming::http-client"]
 
-[features]
-frb = ["dep:chrono"]
-
 [dependencies]
-chrono = { workspace = true, optional = true }
 reqwest = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
 url = { workspace = true }
 
-fandwill-vo = { path = "../fandwill-vo", version = "0.1", default-features = false }
+fandwill-vo = { path = "../fandwill-vo", version = "0.1.1", default-features = false }

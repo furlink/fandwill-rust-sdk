@@ -7,36 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- **`fandwill-sdk`** — removed all FRB (Flutter Rust Bridge) code:
+  - Removed `frb` Cargo feature flag and optional `chrono` dependency.
+  - Removed `FrbError` enum and `frb_error_from!` macro.
+  - Removed `frb_dispatch!` macro; endpoint methods now use direct `impl FandwillClient {}` blocks instead.
+  - Updated `AGENTS.md` to reflect the simplified codebase.
+
 ### Added
 
-- **`fandwill-sdk`** (workspace) — async HTTP client crate built on `reqwest`.
-  - `FandwillClient` with configurable base URL, trailing `/` auto-append.
-  - `Auth` for **API key** (`X-Api-Key`) and **JWT** (`Authorization: Bearer`).
-  - Endpoint groups: `root`, `sign_up`, `sign_in` (auth); `get_listings`,
-    `get_listing`, `add_listing`, `update_listing`, `delete_listing`,
-    `bookmark_listing`, `unbookmark_listing`, `get_listing_versions` (listings).
-  - `send_json<T>()` / `send_empty()` helpers for flattened API response
-    handling.
-  - `Error` (`thiserror`) for `Request`, `InvalidUrl`, `Status`, `Json` errors.
-  - `ListingsQuery` / `SearchMode` for paginated and search query parameters.
-  - `PagedResponse<T>` / `PageInfo` for paginated endpoint responses.
-  - `frb` feature flag (empty, reserved for Flutter Rust Bridge integration).
-  - Re-exports `fandwill_vo` so apps can depend on `fandwill-sdk` only.
-  - `AGENTS.md` agent guide with CI commands and key development facts.
-  - `FrbError` behind `cfg(feature = "frb")` with FRB-compatible String/u16
-    fields.
-  - `frb_error_from!` macro auto-generates `From<Error> for FrbError`.
-  - `frb_dispatch!` macro — endpoint implementations written once in a
-    free-function style; macro generates both the `FandwillClient` method and
-    (with `--features frb`) a variant returning `FrbError`, eliminating the
-    wrapper struct.
-
-- **`fandwill-vo`** — `meta::RootResponse` with `Deserialize` (matches published contract).
+- **`fandwill-sdk`** — async HTTP client built on `reqwest` exposing
+  `FandwillClient`, `Auth` (API key / JWT), `send_json`/`send_empty` helpers,
+  endpoints (`root`, `sign_up`, `sign_in`, `get_listings`, `get_listing`,
+  `add_listing`, `update_listing`, `delete_listing`, `bookmark_listing`,
+  `unbookmark_listing`, `get_listing_versions`), `ListingsQuery`/`SearchMode`,
+  `PagedResponse<T>`/`PageInfo`, `thiserror`-based `Error`, and re-exports
+  `fandwill_vo`.
+- **`fandwill-vo`** — `meta::RootResponse` with `Deserialize` (matches
+  published contract).
 
 ### Changed
 
 - **`fandwill-sdk`** — `ListingsQuery` lifetime removed (`&str` → `String`),
-  added `Clone` derive for FRB compatibility.
+  added `Clone` derive.
 
 ## [0.1.0] - 2026-07-02
 
