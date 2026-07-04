@@ -16,6 +16,7 @@ pub mod meta;
 pub mod resources;
 pub mod reviews;
 pub mod users;
+pub mod validation;
 
 #[cfg(all(test, feature = "garde"))]
 mod tests {

@@ -19,6 +19,7 @@ utoipa = ["dep:utoipa"]
 
 [dependencies]
 serde.workspace = true
+serde_json.workspace = true
 chrono.workspace = true
 url.workspace = true
 garde = { workspace = true, optional = true }
