@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **`fandwill-vo`** — `UpdateListingVersionStatusVO` for listing version status changes.
+- **`fandwill-vo`** — validation wrapper types (`ListingsVOWithValidation`, `ReviewsVOWithValidation`, `ReviewReplyVOWithValidation`) for markdown validation.
+- **`fandwill-vo`** — `RootResponse::new()` convenience constructor.
 - **`fandwill-sdk`** — async HTTP client built on `reqwest` exposing
   `FandwillClient`, `Auth` (API key / JWT), `send_json`/`send_empty` helpers,
   endpoints (`root`, `sign_up`, `sign_in`, `get_listings`, `get_listing`,

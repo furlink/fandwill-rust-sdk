@@ -1,6 +1,8 @@
 use reqwest::Method;
 
-use fandwill_vo::listings::{CreateListingVO, ListingVersionVO, ListingsVO, UpdateListingVO};
+use fandwill_vo::listings::{
+    CreateListingVO, ListingVersionVO, ListingsVO, UpdateListingVO, UpdateListingVersionStatusVO,
+};
 
 use crate::client::FandwillClient;
 use crate::error::Error;
@@ -54,6 +56,21 @@ impl FandwillClient {
 
     pub async fn get_listing_versions(&self, id: &str) -> Result<Vec<ListingVersionVO>, Error> {
         let builder = self.request(Method::GET, &format!("listings/{id}/versions"))?;
+        self.send_json(builder).await
+    }
+
+    pub async fn update_listing_version_status(
+        &self,
+        ref_id: &str,
+        version_id: &str,
+        body: &UpdateListingVersionStatusVO,
+    ) -> Result<ListingVersionVO, Error> {
+        let builder = self
+            .request(
+                Method::PATCH,
+                &format!("listings/{ref_id}/versions/{version_id}/status"),
+            )?
+            .json(body);
         self.send_json(builder).await
     }
 }
