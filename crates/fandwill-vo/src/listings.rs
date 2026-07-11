@@ -21,6 +21,12 @@ pub struct UpdateListingVO {
     pub resources: Vec<String>,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+pub struct UpdateListingVersionStatusVO {
+    pub status: String,
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub struct ListingsVO {
