@@ -22,7 +22,7 @@ pub struct SignUpVO {
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[serde(deny_unknown_fields)]
 pub struct SignUpResponseVO {
-    pub id: String,
+    pub iam_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
