@@ -24,14 +24,16 @@ fandwill-vo = { version = "0.1", default-features = false }
 
 ## Modules
 
-| Module      | Types (examples)                                                       |
-| ----------- | ---------------------------------------------------------------------- |
-| `auth`      | `SignUpVO`, `SignInVO`, `SignUpResponseVO`, `SignInResponseVO`         |
-| `listings`  | `CreateListingVO`, `UpdateListingVO`, `ListingsVO`, `ListingVersionVO` |
-| `users`     | `UsersVO`                                                              |
-| `resources` | `ResourceVO`, `CreateResourceVO`                                       |
-| `reviews`   | `CreateReviewVO`, `CreateReplyVO`, `ReviewReplyVO`, `ReviewsVO`        |
-| `meta`      | `RootResponse`                                                         |
+| Module        | Types (examples)                                               |
+| ------------- | -------------------------------------------------------------- |
+| `auth`        | `SignUpVO`, `SignInVO`, `SignUpResponseVO`, `SignInResponseVO` |
+| `collections` | `AddToCollectionRequest`, `CollectionEntryVO`                  |
+| `listings`    | `CreateListingVO`, `ListingsVO`, `ListingsQuery`, `SearchMode` |
+| `pagination`  | `PaginationParams`, `PageInfo`, `PagedResponse<T>`             |
+| `users`       | `UsersVO`                                                      |
+| `resources`   | `ResourceVO`, `CreateResourceVO`                               |
+| `reviews`     | `CreateReviewVO`, `ReviewReplyVO`, `ReviewsVO`, `ReviewFilter` |
+| `meta`        | `RootResponse`                                                 |
 
 Request types may derive `garde::Validate`; API types used in OpenAPI derive `utoipa::ToSchema`.
 

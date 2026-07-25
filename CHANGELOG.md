@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`fandwill-vo`** — shared collection request/response types.
+- **`fandwill-vo`** — shared pagination, listing search query, and review filter types with Serde and OpenAPI support.
+
+### Changed
+
+- **`fandwill-sdk`** — `ListingsQuery`, `SearchMode`, `PageInfo`, and `PagedResponse<T>` now re-export the shared `fandwill-vo` definitions.
+- **`fandwill-vo`** — listing search modes serialize as lowercase `fts` / `semantic` while still accepting the legacy `Fts` / `Semantic` spellings.
+
 ## [0.1.1] - 2026-07-11
 
 ### Removed

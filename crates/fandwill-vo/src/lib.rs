@@ -11,8 +11,10 @@
 //! Serde-only build: `default-features = false`.
 
 pub mod auth;
+pub mod collections;
 pub mod listings;
 pub mod meta;
+pub mod pagination;
 pub mod resources;
 pub mod reviews;
 pub mod users;
@@ -22,7 +24,6 @@ pub mod validation;
 mod tests {
     use crate::auth::SignUpVO;
     use garde::Validate;
-    use serde_json;
 
     #[test]
     fn sign_up_vo_roundtrip_json() {
@@ -37,5 +38,39 @@ mod tests {
         assert_eq!(back.email, vo.email);
         assert_eq!(back.password, vo.password);
         assert_eq!(back.nickname, vo.nickname);
+    }
+}
+
+#[cfg(all(test, feature = "utoipa"))]
+mod openapi_tests {
+    use crate::{listings::ListingsQuery, pagination::PaginationParams, reviews::ReviewFilter};
+    use utoipa::{IntoParams, openapi::path::ParameterIn};
+
+    fn parameter_names<T: IntoParams>() -> Vec<String> {
+        T::into_params(|| Some(ParameterIn::Query))
+            .into_iter()
+            .map(|parameter| parameter.name)
+            .collect()
+    }
+
+    #[test]
+    fn shared_query_types_expose_every_openapi_parameter() {
+        assert_eq!(parameter_names::<PaginationParams>(), ["page", "page_size"]);
+        assert_eq!(
+            parameter_names::<ListingsQuery>(),
+            [
+                "page",
+                "page_size",
+                "mode",
+                "by",
+                "min_relevance",
+                "query",
+                "max_distance",
+            ]
+        );
+        assert_eq!(
+            parameter_names::<ReviewFilter>(),
+            ["listing_id", "page", "page_size"]
+        );
     }
 }
