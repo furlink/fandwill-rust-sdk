@@ -31,7 +31,7 @@ fandwill-vo = { version = "0.1", default-features = false }
 | `listings`    | `CreateListingVO`, `ListingsVO`, `ListingsQuery`, `SearchMode` |
 | `pagination`  | `PaginationParams`, `PageInfo`, `PagedResponse<T>`             |
 | `users`       | `UsersVO`                                                      |
-| `resources`   | `ResourceVO`, `CreateResourceVO`                               |
+| `resources`   | `ResourceVO`, `ResourceUploadVO`, `CreateResourceVO`           |
 | `reviews`     | `CreateReviewVO`, `ReviewReplyVO`, `ReviewsVO`, `ReviewFilter` |
 | `meta`        | `RootResponse`                                                 |
 
