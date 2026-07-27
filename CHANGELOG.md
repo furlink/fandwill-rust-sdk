@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking
+
+- **`fandwill-vo`** — `RootResponse` gains a `limits: RootLimits` field (currently `max_upload_bytes`) and `RootResponse::new` takes the limits as a third argument.
+
 ## [0.2.0] - 2026-07-27
 
 ### Added
