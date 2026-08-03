@@ -5,23 +5,33 @@ use crate::pagination::{
     PaginationParams, default_page, default_page_size, is_default_page, is_default_page_size,
 };
 
+#[cfg(feature = "garde")]
+fn content_not_blank(value: &str, _: &()) -> garde::Result {
+    if value.trim().is_empty() {
+        Err(garde::Error::new("content must not be blank"))
+    } else {
+        Ok(())
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[cfg_attr(feature = "garde", derive(garde::Validate))]
 pub struct CreateReviewVO {
     #[cfg_attr(feature = "garde", garde(skip))]
-    pub of_listing: String,
-    #[cfg_attr(feature = "garde", garde(range(min = 0, max = 100)))]
-    pub rating: i32,
-    #[cfg_attr(feature = "garde", garde(skip))]
+    pub listing_id: String,
+    #[cfg_attr(feature = "garde", garde(custom(content_not_blank)))]
     pub content: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[cfg_attr(feature = "garde", derive(garde::Validate))]
 pub struct CreateReplyVO {
+    #[cfg_attr(feature = "garde", garde(custom(content_not_blank)))]
     pub content: String,
-    pub parent_id: Option<String>,
+    #[cfg_attr(feature = "garde", garde(skip))]
+    pub parent_reply_id: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -29,7 +39,7 @@ pub struct CreateReplyVO {
 pub struct ReviewReplyVO {
     pub id: String,
     pub review_id: String,
-    pub parent_id: Option<String>,
+    pub parent_reply_id: Option<String>,
     pub created_by: String,
     pub content: String,
     pub created_at: DateTime<Utc>,
@@ -40,9 +50,8 @@ pub struct ReviewReplyVO {
 pub struct ReviewsVO {
     pub id: String,
     pub created_by: String,
-    pub of_listing: String,
+    pub listing_id: String,
     pub content: String,
-    pub rating: i32,
 }
 
 fn option_string_is_none_or_empty(value: &Option<String>) -> bool {
@@ -91,6 +100,50 @@ impl Default for ReviewFilter {
             page: default_page(),
             page_size: default_page_size(),
         }
+    }
+}
+
+#[cfg(all(test, feature = "garde"))]
+mod validation_tests {
+    use garde::Validate;
+
+    use super::*;
+
+    #[test]
+    fn create_review_rejects_blank_content() {
+        for content in ["", "   ", "\t\n "] {
+            let vo = CreateReviewVO {
+                listing_id: "listing".into(),
+                content: content.into(),
+            };
+            assert!(vo.validate().is_err(), "expected rejection of {content:?}");
+        }
+    }
+
+    #[test]
+    fn create_reply_rejects_blank_content() {
+        for content in ["", "   ", "\t\n "] {
+            let vo = CreateReplyVO {
+                content: content.into(),
+                parent_reply_id: None,
+            };
+            assert!(vo.validate().is_err(), "expected rejection of {content:?}");
+        }
+    }
+
+    #[test]
+    fn create_requests_accept_non_blank_content() {
+        let review = CreateReviewVO {
+            listing_id: "listing".into(),
+            content: "  looks great  ".into(),
+        };
+        assert!(review.validate().is_ok());
+
+        let reply = CreateReplyVO {
+            content: "thanks".into(),
+            parent_reply_id: Some("reply".into()),
+        };
+        assert!(reply.validate().is_ok());
     }
 }
 

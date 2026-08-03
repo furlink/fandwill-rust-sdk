@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Breaking
 
+- **`fandwill-vo`** — review contracts: `CreateReviewVO.of_listing` renamed to `listing_id` with `rating` removed from both `CreateReviewVO` and `ReviewsVO`; `CreateReplyVO.parent_id` and `ReviewReplyVO.parent_id` renamed to `parent_reply_id`.
 - **`fandwill-vo`** — `RootResponse` gains a `limits: RootLimits` field (currently `max_upload_bytes`) and `RootResponse::new` takes the limits as a third argument.
+
+### Added
+
+- **`fandwill-vo`** — `CreateReviewVO.content` and `CreateReplyVO.content` reject blank (whitespace-only) values via garde validation.
 
 ## [0.2.0] - 2026-07-27
 
