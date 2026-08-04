@@ -7,16 +7,19 @@ license.workspace = true
 repository.workspace = true
 version.workspace = true
 
-description = "Async HTTP client for the Fandwill platform API (native and WASM)."
+description = "Async HTTP client for the Fandwill platform API."
 readme = "README.md"
 keywords = ["fandwill", "api", "client", "reqwest"]
 categories = ["api-bindings", "web-programming::http-client"]
 
 [dependencies]
-reqwest = { workspace = true }
+reqwest = { workspace = true, features = ["rustls-tls"] }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
 url = { workspace = true }
 
-fandwill-vo = { path = "../fandwill-vo", version = "0.3.0", default-features = false }
+fandwill-vo = { path = "../fandwill-vo", version = "0.4.0", default-features = false }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }

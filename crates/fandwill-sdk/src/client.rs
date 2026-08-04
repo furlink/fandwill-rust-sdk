@@ -1,4 +1,4 @@
-use reqwest::{Client, Method, RequestBuilder};
+use reqwest::{Client, Method, RequestBuilder, header::LOCATION, redirect::Policy};
 use serde::de::DeserializeOwned;
 use url::Url;
 
@@ -28,6 +28,12 @@ impl FandwillClient {
         })
     }
 
+    /// Configures the legacy `X-Api-Key` authentication header.
+    ///
+    /// The current public OpenAPI contract only declares bearer JWT authentication.
+    #[deprecated(
+        note = "the current Fandwill OpenAPI contract only supports bearer JWTs; use with_jwt"
+    )]
     pub fn with_api_key(mut self, key: impl Into<String>) -> Self {
         self.auth = Some(Auth::api_key(key));
         self
@@ -73,5 +79,41 @@ impl FandwillClient {
             return Err(Error::Status { status, body });
         }
         Ok(())
+    }
+
+    pub(crate) async fn send_redirect_url(&self, builder: RequestBuilder) -> Result<Url, Error> {
+        // A request can be executed by another reqwest client after it is built. Use a
+        // no-redirect client so the SDK returns the presigned target without downloading it.
+        let request = builder.build()?;
+        let client = Client::builder().redirect(Policy::none()).build()?;
+        let response = client.execute(request).await?;
+        let status = response.status();
+
+        if !status.is_redirection() {
+            let body = response.text().await?;
+            return Err(Error::Status { status, body });
+        }
+
+        let base_url = response.url().clone();
+        let location = response
+            .headers()
+            .get(LOCATION)
+            .ok_or(Error::MissingRedirectLocation { status })?
+            .to_str()
+            .map_err(|error| Error::InvalidRedirectLocation(error.to_string()))?;
+
+        base_url
+            .join(location)
+            .map_err(|error| Error::InvalidRedirectLocation(format!("{location:?}: {error}")))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn native_reqwest_build_exposes_rustls() {
+        Client::builder().use_rustls_tls().build().unwrap();
     }
 }

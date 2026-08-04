@@ -1,7 +1,11 @@
 use reqwest::Method;
 
-use fandwill_vo::listings::{
-    CreateListingVO, ListingVersionVO, ListingsVO, UpdateListingVO, UpdateListingVersionStatusVO,
+use fandwill_vo::{
+    listings::{
+        BookmarkVO, CreateListingVO, ListingVersionVO, ListingsVO, UpdateListingVO,
+        UpdateListingVersionStatusVO,
+    },
+    validation::ListingsVOWithValidation,
 };
 
 use crate::client::FandwillClient;
@@ -23,7 +27,10 @@ impl FandwillClient {
         self.send_json(builder).await
     }
 
-    pub async fn add_listing(&self, body: &CreateListingVO) -> Result<ListingsVO, Error> {
+    pub async fn add_listing(
+        &self,
+        body: &CreateListingVO,
+    ) -> Result<ListingsVOWithValidation, Error> {
         let builder = self.request(Method::POST, "listings")?.json(body);
         self.send_json(builder).await
     }
@@ -32,7 +39,7 @@ impl FandwillClient {
         &self,
         id: &str,
         body: &UpdateListingVO,
-    ) -> Result<ListingsVO, Error> {
+    ) -> Result<ListingsVOWithValidation, Error> {
         let builder = self
             .request(Method::PUT, &format!("listings/{id}"))?
             .json(body);
@@ -42,6 +49,11 @@ impl FandwillClient {
     pub async fn delete_listing(&self, id: &str) -> Result<(), Error> {
         let builder = self.request(Method::DELETE, &format!("listings/{id}"))?;
         self.send_empty(builder).await
+    }
+
+    pub async fn get_bookmark(&self, id: &str) -> Result<BookmarkVO, Error> {
+        let builder = self.request(Method::GET, &format!("listings/{id}/bookmark"))?;
+        self.send_json(builder).await
     }
 
     pub async fn bookmark_listing(&self, id: &str) -> Result<(), Error> {
@@ -54,7 +66,10 @@ impl FandwillClient {
         self.send_empty(builder).await
     }
 
-    pub async fn get_listing_versions(&self, id: &str) -> Result<Vec<ListingVersionVO>, Error> {
+    pub async fn get_listing_versions(
+        &self,
+        id: &str,
+    ) -> Result<PagedResponse<ListingVersionVO>, Error> {
         let builder = self.request(Method::GET, &format!("listings/{id}/versions"))?;
         self.send_json(builder).await
     }

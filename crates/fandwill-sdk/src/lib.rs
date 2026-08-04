@@ -1,7 +1,6 @@
-//! Async HTTP client for the [Fandwill](https://github.com/furlink/fandwil-rust-sdk) API.
+//! Async HTTP client for the [Fandwill](https://github.com/furlink/fandwill-rust-sdk) API.
 //!
-//! Uses [`reqwest`] on native targets and browser `fetch` on `wasm32-unknown-unknown`.
-//! Payload types come from [`fandwill_vo`].
+//! Uses [`reqwest`] with rustls on native targets. Payload types come from [`fandwill_vo`].
 
 mod auth;
 mod client;
@@ -12,8 +11,8 @@ mod response;
 
 pub use auth::Auth;
 pub use client::FandwillClient;
-pub use error::Error;
-pub use query::{ListingsQuery, SearchMode};
+pub use error::{ApiError, Error};
+pub use query::{ListingsQuery, NotificationsQuery, PaginationParams, ReviewFilter, SearchMode};
 pub use response::{PageInfo, PagedResponse};
 
 /// Request/response types for the Fandwill API (re-exported from `fandwill-vo`).

@@ -1,7 +1,7 @@
 /// How the client authenticates with the API.
 #[derive(Clone, Debug)]
 pub enum Auth {
-    /// API key (sent as `X-Api-Key`).
+    /// Legacy API key (sent as `X-Api-Key`; not declared by the current OpenAPI contract).
     ApiKey(String),
     /// JWT access token (sent as `Authorization: Bearer`).
     Jwt(String),
