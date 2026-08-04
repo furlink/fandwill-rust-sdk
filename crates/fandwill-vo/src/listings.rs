@@ -57,6 +57,14 @@ pub struct ListingVersionVO {
     pub status: String,
 }
 
+/// The authenticated user's bookmark for one listing.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+pub struct BookmarkVO {
+    pub listing_id: String,
+    pub created_at: DateTime<Utc>,
+}
+
 /// Search mode for `GET /listings`; selects how `q` is interpreted.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
@@ -192,6 +200,21 @@ mod query_tests {
         assert_eq!(
             serde_json::from_value::<ListingsQuery>(json).unwrap(),
             semantic
+        );
+    }
+
+    #[test]
+    fn bookmark_roundtrips_json() {
+        let bookmark = BookmarkVO {
+            listing_id: "listing".into(),
+            created_at: DateTime::parse_from_rfc3339("2026-08-04T00:00:00Z")
+                .unwrap()
+                .with_timezone(&Utc),
+        };
+        let value = serde_json::to_value(&bookmark).unwrap();
+        assert_eq!(
+            serde_json::from_value::<BookmarkVO>(value).unwrap(),
+            bookmark
         );
     }
 }

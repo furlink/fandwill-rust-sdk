@@ -1,4 +1,4 @@
-//! Shared value objects for the [Fandwill](https://github.com/furlink/fandwil-rust-sdk) HTTP API.
+//! Shared value objects for the [Fandwill](https://github.com/furlink/fandwill-rust-sdk) HTTP API.
 //!
 //! Use the same crate version in the Fandwill backend, future Rust SDK, and any generated
 //! client bindings so JSON payloads stay aligned.
@@ -14,6 +14,7 @@ pub mod auth;
 pub mod collections;
 pub mod listings;
 pub mod meta;
+pub mod notifications;
 pub mod pagination;
 pub mod resources;
 pub mod reviews;
@@ -43,7 +44,10 @@ mod tests {
 
 #[cfg(all(test, feature = "utoipa"))]
 mod openapi_tests {
-    use crate::{listings::ListingsQuery, pagination::PaginationParams, reviews::ReviewFilter};
+    use crate::{
+        listings::ListingsQuery, notifications::NotificationsQuery, pagination::PaginationParams,
+        reviews::ReviewFilter,
+    };
     use utoipa::{IntoParams, openapi::path::ParameterIn};
 
     fn parameter_names<T: IntoParams>() -> Vec<String> {
@@ -70,6 +74,10 @@ mod openapi_tests {
         assert_eq!(
             parameter_names::<ReviewFilter>(),
             ["listing_id", "page", "page_size"]
+        );
+        assert_eq!(
+            parameter_names::<NotificationsQuery>(),
+            ["page", "page_size", "unread_only", "after_id"]
         );
     }
 }

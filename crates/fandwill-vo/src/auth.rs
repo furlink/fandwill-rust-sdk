@@ -20,7 +20,6 @@ pub struct SignUpVO {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
-#[serde(deny_unknown_fields)]
 pub struct SignUpResponseVO {
     pub iam_id: String,
 }
@@ -52,7 +51,30 @@ pub enum SignInVO {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
-#[serde(deny_unknown_fields)]
 pub struct SignInResponseVO {
     pub token: String,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn response_types_tolerate_flattened_api_metadata() {
+        let sign_up: SignUpResponseVO = serde_json::from_value(serde_json::json!({
+            "iam_id": "iam-user",
+            "code": 200,
+            "msg": null
+        }))
+        .unwrap();
+        assert_eq!(sign_up.iam_id, "iam-user");
+
+        let sign_in: SignInResponseVO = serde_json::from_value(serde_json::json!({
+            "token": "jwt",
+            "code": 200,
+            "msg": "ok"
+        }))
+        .unwrap();
+        assert_eq!(sign_in.token, "jwt");
+    }
 }
