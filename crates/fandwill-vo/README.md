@@ -8,13 +8,13 @@ Use the **same crate version** in the Fandwill backend, future Rust SDK, and any
 
 ```toml
 [dependencies]
-fandwill-vo = "0.1"
+fandwill-vo = "0.4"
 ```
 
 Serde only (no validation or OpenAPI derives):
 
 ```toml
-fandwill-vo = { version = "0.1", default-features = false }
+fandwill-vo = { version = "0.4", default-features = false }
 ```
 
 | Feature  | Default | Description                            |
@@ -34,6 +34,7 @@ fandwill-vo = { version = "0.1", default-features = false }
 | `resources`   | `ResourceVO`, `ResourceUploadVO`, `CreateResourceVO`           |
 | `reviews`     | `CreateReviewVO`, `ReviewReplyVO`, `ReviewsVO`, `ReviewFilter` |
 | `meta`        | `RootResponse`                                                 |
+| `notifications` | `NotificationVO`, `NotificationPayloadVO`, `NotificationsQuery` |
 
 Request types may derive `garde::Validate`; API types used in OpenAPI derive `utoipa::ToSchema`.
 
@@ -56,15 +57,15 @@ fn main() -> Result<(), garde::Report> {
 
 ## Stability
 
-**0.1.0** is the initial public release. While the HTTP API stabilizes, minor releases may add fields; read the [changelog](https://github.com/furlink/fandwil-rust-sdk/blob/main/CHANGELOG.md) before upgrading.
+The crate is currently in the `0.x` series. Minor releases may include contract changes while the HTTP API stabilizes; read the [changelog](https://github.com/furlink/fandwill-rust-sdk/blob/main/CHANGELOG.md) before upgrading.
 
 ## Workspace
 
-Part of the [Fandwill Rust SDK](https://github.com/furlink/fandwil-rust-sdk) repository. Maintainer release steps: [docs/RELEASE.md](https://github.com/furlink/fandwil-rust-sdk/blob/main/docs/RELEASE.md).
+Part of the [Fandwill Rust SDK](https://github.com/furlink/fandwill-rust-sdk) repository.
 
 ## License
 
-Licensed under either of Apache License, Version 2.0 or MIT license, at your option. See [LICENSE-APACHE](https://github.com/furlink/fandwil-rust-sdk/blob/main/LICENSE-APACHE) and [LICENSE-MIT](https://github.com/furlink/fandwil-rust-sdk/blob/main/LICENSE-MIT) in the repository.
+Licensed under either of Apache License, Version 2.0 or MIT license, at your option. See [LICENSE-APACHE](https://github.com/furlink/fandwill-rust-sdk/blob/main/LICENSE-APACHE) and [LICENSE-MIT](https://github.com/furlink/fandwill-rust-sdk/blob/main/LICENSE-MIT) in the repository.
 
 ## Trademark
 

@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-08-04
+
+### Breaking
+
+- **`fandwill-sdk`** — `add_listing` and `update_listing` now return `ListingsVOWithValidation`, preserving the API's `markdown_validation` results instead of silently discarding them.
+- **`fandwill-sdk`** — `get_listing_versions` now returns `PagedResponse<ListingVersionVO>` to match the wire response.
+- **`fandwill-sdk`** — `Error` is now non-exhaustive and adds explicit redirect failures for missing or invalid `Location` headers.
+- **`fandwill-sdk`** — WASM support has been removed; the client now targets native platforms only.
+
+### Added
+
+- **`fandwill-sdk`** — complete endpoint coverage for the 38-operation public OpenAPI contract, including bookmark lookup, resources, reviews and replies, users and collections, and notifications.
+- **`fandwill-sdk`** — native HTTPS through reqwest with rustls.
+- **`fandwill-sdk`** — typed `ApiError` access through `Error::api_error()` while preserving the existing status and raw response body.
+- **`fandwill-sdk`** — `get_resource` redirect handling that returns the presigned `Location` URL without downloading the object.
+- **`fandwill-vo`** — bookmark and notification response/query types, including tagged notification payload and action enums.
+
+### Changed
+
+- **`fandwill-vo`** — validation response wrappers can now be deserialized by API clients; sign-in and sign-up response types tolerate flattened response metadata.
+- **`fandwill-sdk`** — `with_api_key` is deprecated because the current OpenAPI contract only declares bearer JWT authentication.
+- Updated crate documentation, installation versions, target support claims, API base URL examples, and pre-release package checks for the required VO-before-SDK publication order.
+
 ## [0.3.0] - 2026-08-04
 
 ### Breaking
@@ -80,8 +103,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `ToSchema` and field attributes apply only when the corresponding feature is
   enabled. Use `default-features = false` for a serde-only dependency.
 
-[Unreleased]: https://github.com/furlink/fandwil-rust-sdk/compare/v0.3.0...HEAD
-[0.3.0]: https://github.com/furlink/fandwil-rust-sdk/releases/tag/v0.3.0
-[0.2.0]: https://github.com/furlink/fandwil-rust-sdk/releases/tag/v0.2.0
-[0.1.1]: https://github.com/furlink/fandwil-rust-sdk/releases/tag/v0.1.1
-[0.1.0]: https://github.com/furlink/fandwil-rust-sdk/releases/tag/v0.1.0
+[Unreleased]: https://github.com/furlink/fandwill-rust-sdk/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/furlink/fandwill-rust-sdk/releases/tag/v0.4.0
+[0.3.0]: https://github.com/furlink/fandwill-rust-sdk/releases/tag/v0.3.0
+[0.2.0]: https://github.com/furlink/fandwill-rust-sdk/releases/tag/v0.2.0
+[0.1.1]: https://github.com/furlink/fandwill-rust-sdk/releases/tag/v0.1.1
+[0.1.0]: https://github.com/furlink/fandwill-rust-sdk/releases/tag/v0.1.0

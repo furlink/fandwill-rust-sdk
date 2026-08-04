@@ -1,30 +1,24 @@
 # Fandwill Rust SDK
 
-Monorepo for **Fandwill** API client and shared types. The first published crate is the JSON contract layer; a higher-level Rust SDK crate is planned.
-
-## Who uses what
-
-| Consumer                           | Role                                                                           |
-| ---------------------------------- | ------------------------------------------------------------------------------ |
-| **Fandwill backend** (proprietary) | Depends on `fandwill-vo` for request/response shapes and validation            |
-| **Open-source Rust SDK** (planned) | Will depend on the same `fandwill-vo` version from crates.io                   |
-| **Dart SDK** (planned)             | Generated from the same API contract; align releases with `fandwill-vo` semver |
-
-Treat **`fandwill-vo` as the source of truth for payload shapes** in Rust. Keep the same version pinned everywhere when you ship an API change.
+Rust value objects and an async HTTP client for the **Fandwill** platform API.
 
 ## Crates
 
-| Crate                                             | crates.io      | Description                            |
-| ------------------------------------------------- | -------------- | -------------------------------------- |
-| [`fandwill-vo`](./crates/fandwill-vo/README.md)   | `fandwill-vo`  | Serde, garde, and utoipa value objects |
-| [`fandwill-sdk`](./crates/fandwill-sdk/README.md) | `fandwill-sdk` | Async HTTP client (native + WASM)      |
+| Crate | crates.io | Description |
+| --- | --- | --- |
+| [`fandwill-vo`](./crates/fandwill-vo/README.md) | `fandwill-vo` | Shared Serde, garde, and utoipa value objects |
+| [`fandwill-sdk`](./crates/fandwill-sdk/README.md) | `fandwill-sdk` | Async client for the complete public API surface |
 
 ```toml
 [dependencies]
-fandwill-vo = "0.1"
+fandwill-sdk = "0.4"
 ```
 
-See [CHANGELOG.md](./CHANGELOG.md) and [docs/RELEASE.md](./docs/RELEASE.md) for releases.
+The backend and SDK should use the same `fandwill-vo` version when a payload contract changes. The SDK re-exports the value-object crate as `fandwill_sdk::fandwill_vo`.
+
+The SDK targets native platforms and uses rustls for HTTPS. WASM is not supported.
+
+See [CHANGELOG.md](./CHANGELOG.md) for release history and the crate READMEs for usage.
 
 ## License
 
