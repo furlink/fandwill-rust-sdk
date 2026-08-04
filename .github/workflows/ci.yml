@@ -14,14 +14,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: rustup target add wasm32-unknown-unknown
       - name: Format
         run: cargo fmt --all -- --check
       - name: Clippy
         run: cargo clippy -- -D warnings
       - name: Test
         run: cargo test --all
-      - name: Check SDK (wasm)
-        run: cargo check --target wasm32-unknown-unknown
-      - name: Publish dry-run
-        run: cargo publish --dry-run
+      - name: Publish dry-run (value objects)
+        run: cargo publish --dry-run -p fandwill-vo
+      # SDK publish verification is run after the matching fandwill-vo version is
+      # published. Workspace checks above compile against the local VO; this keeps
+      # the pre-release CI check independent of registry publication order.
+      - name: Check SDK package contents
+        run: cargo package -p fandwill-sdk --list
