@@ -57,56 +57,53 @@ pub struct ListingVersionVO {
     pub status: String,
 }
 
-#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+/// Search mode for `GET /listings`; selects how `q` is interpreted.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[serde(rename_all = "snake_case")]
 pub enum SearchMode {
-    #[default]
+    /// Keyword full-text search; `min_relevance` applies.
     #[serde(alias = "Fts")]
     Fts,
+    /// Natural-language semantic search; `max_distance` applies.
     #[serde(alias = "Semantic")]
     Semantic,
 }
 
-const fn is_default_search_mode(value: &SearchMode) -> bool {
-    matches!(value, SearchMode::Fts)
-}
-
-fn option_string_is_none_or_empty(value: &Option<String>) -> bool {
-    value.as_deref().map(str::is_empty).unwrap_or(true)
-}
-
 /// Query parameters accepted by `GET /listings`.
+///
+/// Without `mode`, the endpoint browses all published listings; `q`, `min_relevance` and
+/// `max_distance` must then be omitted. With `mode`, `q` is required and only the threshold
+/// of the selected mode may be supplied. Invalid combinations are rejected with 400.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[cfg_attr(feature = "utoipa", derive(utoipa::IntoParams, utoipa::ToSchema))]
 #[cfg_attr(feature = "utoipa", into_params(parameter_in = Query))]
 pub struct ListingsQuery {
+    /// Page number (1-based).
     #[serde(default = "default_page", skip_serializing_if = "is_default_page")]
     pub page: u32,
 
+    /// Items per page, clamped to 1..=100.
     #[serde(
         default = "default_page_size",
         skip_serializing_if = "is_default_page_size"
     )]
     pub page_size: u32,
 
-    #[serde(default, skip_serializing_if = "is_default_search_mode")]
+    /// Search mode. Omit to browse all published listings.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     #[cfg_attr(feature = "utoipa", param(inline))]
-    pub mode: SearchMode,
+    pub mode: Option<SearchMode>,
 
-    /// Full-text query; required in [`SearchMode::Fts`] mode.
-    #[serde(default, skip_serializing_if = "option_string_is_none_or_empty")]
-    pub by: Option<String>,
+    /// Search term: keywords in `fts` mode, natural language in `semantic` mode.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub q: Option<String>,
 
-    /// Optional `ts_rank` floor for full-text search.
+    /// Optional `ts_rank` floor; only valid with `mode=fts`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub min_relevance: Option<f32>,
 
-    /// Natural-language query; required in [`SearchMode::Semantic`] mode.
-    #[serde(default, skip_serializing_if = "option_string_is_none_or_empty")]
-    pub query: Option<String>,
-
-    /// Optional cosine-distance ceiling for semantic search.
+    /// Optional cosine-distance ceiling; only valid with `mode=semantic`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub max_distance: Option<f32>,
 }
@@ -132,10 +129,9 @@ impl Default for ListingsQuery {
         Self {
             page: default_page(),
             page_size: default_page_size(),
-            mode: SearchMode::default(),
-            by: None,
+            mode: None,
+            q: None,
             min_relevance: None,
-            query: None,
             max_distance: None,
         }
     }
@@ -165,22 +161,37 @@ mod query_tests {
     }
 
     #[test]
-    fn semantic_query_roundtrips_all_public_fields() {
-        let query = ListingsQuery {
+    fn browse_and_mode_queries_roundtrip_all_public_fields() {
+        // Browse mode: an absent `mode` serializes as an omitted field.
+        let browse = ListingsQuery {
             page: 2,
             page_size: 10,
-            mode: SearchMode::Semantic,
-            by: None,
+            mode: None,
+            q: None,
             min_relevance: None,
-            query: Some("knowledge graph".into()),
+            max_distance: None,
+        };
+        let json = serde_json::to_value(&browse).unwrap();
+        assert!(json.get("mode").is_none());
+        assert_eq!(
+            serde_json::from_value::<ListingsQuery>(json).unwrap(),
+            browse
+        );
+
+        // Semantic search roundtrips `q` and `max_distance`.
+        let semantic = ListingsQuery {
+            page: 1,
+            page_size: 20,
+            mode: Some(SearchMode::Semantic),
+            q: Some("knowledge graph".into()),
+            min_relevance: None,
             max_distance: Some(0.42),
         };
-
-        let json = serde_json::to_value(&query).unwrap();
+        let json = serde_json::to_value(&semantic).unwrap();
         assert_eq!(json["mode"], "semantic");
         assert_eq!(
             serde_json::from_value::<ListingsQuery>(json).unwrap(),
-            query
+            semantic
         );
     }
 }

@@ -62,9 +62,8 @@ mod openapi_tests {
                 "page",
                 "page_size",
                 "mode",
-                "by",
+                "q",
                 "min_relevance",
-                "query",
                 "max_distance",
             ]
         );

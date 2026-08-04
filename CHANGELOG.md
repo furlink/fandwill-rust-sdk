@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-08-04
+
 ### Breaking
 
+- **`fandwill-vo`** — `ListingsQuery` search contract reworked: `mode` is now `Option<SearchMode>` (absent means browse, present selects the search type), and the legacy `by`/`query` pair is unified into a single `q` term whose interpretation depends on `mode`.
 - **`fandwill-vo`** — review contracts: `CreateReviewVO.of_listing` renamed to `listing_id` with `rating` removed from both `CreateReviewVO` and `ReviewsVO`; `CreateReplyVO.parent_id` and `ReviewReplyVO.parent_id` renamed to `parent_reply_id`.
 - **`fandwill-vo`** — `RootResponse` gains a `limits: RootLimits` field (currently `max_upload_bytes`) and `RootResponse::new` takes the limits as a third argument.
 
@@ -77,7 +80,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `ToSchema` and field attributes apply only when the corresponding feature is
   enabled. Use `default-features = false` for a serde-only dependency.
 
-[Unreleased]: https://github.com/furlink/fandwil-rust-sdk/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/furlink/fandwil-rust-sdk/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/furlink/fandwil-rust-sdk/releases/tag/v0.3.0
 [0.2.0]: https://github.com/furlink/fandwil-rust-sdk/releases/tag/v0.2.0
 [0.1.1]: https://github.com/furlink/fandwil-rust-sdk/releases/tag/v0.1.1
 [0.1.0]: https://github.com/furlink/fandwil-rust-sdk/releases/tag/v0.1.0
