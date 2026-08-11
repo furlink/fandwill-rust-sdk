@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking
+
+- **`fandwill-vo`** — `ReviewsVO` gains `like_count`, `viewer_liked`, and `created_at` fields (constructors must now supply all three).
+- **`fandwill-vo`** — `RootLimits` gains the required `max_image_pixels` field (constructors must now supply it).
+
+### Added
+
+- **`fandwill-vo`** — `ReviewsVO` now reports the like count (`like_count`), whether the requesting user has liked the review (`viewer_liked`), and the review creation time (`created_at`).
+- **`fandwill-vo`** — `RootLimits` exposes `max_image_pixels` so clients can preflight decoded image dimensions.
+- **`fandwill-vo`** — `UserCapabilitiesVO` describes the `GET /users/me/capabilities` response.
+- **`fandwill-sdk`** — `get_my_capabilities` covers `GET /users/me/capabilities`.
+
 ## [0.4.0] - 2026-08-04
 
 ### Breaking

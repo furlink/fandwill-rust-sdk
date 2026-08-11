@@ -30,10 +30,10 @@ fandwill-vo = { version = "0.4", default-features = false }
 | `collections` | `AddToCollectionRequest`, `CollectionEntryVO`                  |
 | `listings`    | `CreateListingVO`, `ListingsVO`, `ListingsQuery`, `SearchMode` |
 | `pagination`  | `PaginationParams`, `PageInfo`, `PagedResponse<T>`             |
-| `users`       | `UsersVO`                                                      |
+| `users`       | `UsersVO`, `UserCapabilitiesVO`                                |
 | `resources`   | `ResourceVO`, `ResourceUploadVO`, `CreateResourceVO`           |
 | `reviews`     | `CreateReviewVO`, `ReviewReplyVO`, `ReviewsVO`, `ReviewFilter` |
-| `meta`        | `RootResponse`                                                 |
+| `meta`        | `RootResponse`, `RootLimits`                                   |
 | `notifications` | `NotificationVO`, `NotificationPayloadVO`, `NotificationsQuery` |
 
 Request types may derive `garde::Validate`; API types used in OpenAPI derive `utoipa::ToSchema`.
