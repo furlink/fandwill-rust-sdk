@@ -310,6 +310,7 @@ async fn added_endpoint_methods_and_paths_match_the_openapi_contract() {
     const REVIEW_WITH_VALIDATION: &str = r#"{"id":"review","created_by":"user","listing_id":"listing","content":"Content","like_count":0,"viewer_liked":false,"created_at":"2026-08-04T00:00:00Z","markdown_validation":[]}"#;
     const REPLY_WITH_VALIDATION: &str = r#"{"id":"reply","review_id":"review","parent_reply_id":null,"created_by":"user","content":"Reply","created_at":"2026-08-04T00:00:00Z","markdown_validation":[]}"#;
     const USER: &str = r#"{"id":"user","sub":"iam-subject"}"#;
+    const USER_CAPABILITIES: &str = r#"{"is_admin":true}"#;
     const COLLECTION: &str =
         r#"{"id":"entry","resource_id":"resource","created_at":"2026-08-04T00:00:00Z"}"#;
     const NOTIFICATION: &str = r#"{"id":"notification","actor_id":null,"payload":{"kind":"system","data":{"title":"Title","body":"Body","action":null}},"created_at":"2026-08-04T00:00:00Z","read_at":null}"#;
@@ -413,6 +414,13 @@ async fn added_endpoint_methods_and_paths_match_the_openapi_contract() {
     );
 
     let _ = assert_json_contract!(client, "GET", "/users/me", USER, client.get_me());
+    let _ = assert_json_contract!(
+        client,
+        "GET",
+        "/users/me/capabilities",
+        USER_CAPABILITIES,
+        client.get_my_capabilities()
+    );
     let _ = assert_json_contract!(
         client,
         "GET",

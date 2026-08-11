@@ -5,7 +5,7 @@ use fandwill_vo::{
     listings::ListingsVO,
     pagination::{PagedResponse, PaginationParams},
     reviews::ReviewsVO,
-    users::UsersVO,
+    users::{UserCapabilitiesVO, UsersVO},
 };
 
 use crate::{client::FandwillClient, error::Error};
@@ -13,6 +13,11 @@ use crate::{client::FandwillClient, error::Error};
 impl FandwillClient {
     pub async fn get_me(&self) -> Result<UsersVO, Error> {
         let builder = self.request(Method::GET, "users/me")?;
+        self.send_json(builder).await
+    }
+
+    pub async fn get_my_capabilities(&self) -> Result<UserCapabilitiesVO, Error> {
+        let builder = self.request(Method::GET, "users/me/capabilities")?;
         self.send_json(builder).await
     }
 
