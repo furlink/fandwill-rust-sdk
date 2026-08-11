@@ -52,6 +52,9 @@ pub struct ReviewsVO {
     pub created_by: String,
     pub listing_id: String,
     pub content: String,
+    pub like_count: u64,
+    pub viewer_liked: bool,
+    pub created_at: DateTime<Utc>,
 }
 
 fn option_string_is_none_or_empty(value: &Option<String>) -> bool {

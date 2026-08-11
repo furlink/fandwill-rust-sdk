@@ -62,6 +62,9 @@ mod tests {
             "created_by": "user",
             "listing_id": "listing",
             "content": "Content",
+            "like_count": 0,
+            "viewer_liked": false,
+            "created_at": "2026-08-04T00:00:00Z",
             "markdown_validation": []
         }))
         .unwrap();

@@ -301,19 +301,20 @@ macro_rules! assert_json_contract {
 #[tokio::test]
 async fn added_endpoint_methods_and_paths_match_the_openapi_contract() {
     const EMPTY: &str = "{}";
+    const ROOT: &str = r#"{"start_at":"2026-08-04T00:00:00Z","version":"0.1.0","limits":{"max_upload_bytes":1024,"max_image_pixels":25000000}}"#;
     const PAGED_EMPTY: &str = r#"{"items":[],"page_info":{"has_next":false,"total":0}}"#;
     const BOOKMARK: &str = r#"{"listing_id":"listing","created_at":"2026-08-04T00:00:00Z"}"#;
     const CREATED_RESOURCE: &str = r#"{"id":"resource","upload":{"url":"https://uploads.example.test/","method":"POST","fields":{},"max_bytes":1024,"expires_in_secs":60}}"#;
     const RESOURCE: &str = r#"{"id":"resource","mime_type":null,"hash":null,"size_bytes":null,"created_at":"2026-08-04T00:00:00Z"}"#;
-    const REVIEW: &str =
-        r#"{"id":"review","created_by":"user","listing_id":"listing","content":"Content"}"#;
-    const REVIEW_WITH_VALIDATION: &str = r#"{"id":"review","created_by":"user","listing_id":"listing","content":"Content","markdown_validation":[]}"#;
+    const REVIEW: &str = r#"{"id":"review","created_by":"user","listing_id":"listing","content":"Content","like_count":0,"viewer_liked":false,"created_at":"2026-08-04T00:00:00Z"}"#;
+    const REVIEW_WITH_VALIDATION: &str = r#"{"id":"review","created_by":"user","listing_id":"listing","content":"Content","like_count":0,"viewer_liked":false,"created_at":"2026-08-04T00:00:00Z","markdown_validation":[]}"#;
     const REPLY_WITH_VALIDATION: &str = r#"{"id":"reply","review_id":"review","parent_reply_id":null,"created_by":"user","content":"Reply","created_at":"2026-08-04T00:00:00Z","markdown_validation":[]}"#;
     const USER: &str = r#"{"id":"user","sub":"iam-subject"}"#;
     const COLLECTION: &str =
         r#"{"id":"entry","resource_id":"resource","created_at":"2026-08-04T00:00:00Z"}"#;
     const NOTIFICATION: &str = r#"{"id":"notification","actor_id":null,"payload":{"kind":"system","data":{"title":"Title","body":"Body","action":null}},"created_at":"2026-08-04T00:00:00Z","read_at":null}"#;
 
+    let _ = assert_json_contract!(client, "GET", "/", ROOT, client.root());
     let _ = assert_json_contract!(
         client,
         "GET",
