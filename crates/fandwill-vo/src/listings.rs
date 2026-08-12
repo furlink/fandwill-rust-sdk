@@ -32,6 +32,33 @@ pub struct UpdateListingVersionStatusVO {
     pub status: String,
 }
 
+/// Audience allowed to perform a capability-controlled listing action.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[serde(rename_all = "snake_case")]
+pub enum ListingCapabilityAudience {
+    /// Any user allowed to access the listing.
+    Everyone,
+    /// Administrators only.
+    Administrators,
+}
+
+/// Effective edit and reply capabilities for a listing.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+pub struct ListingCapabilitiesVO {
+    pub edit: ListingCapabilityAudience,
+    pub reply: ListingCapabilityAudience,
+}
+
+/// Administrator request for changing a listing's capabilities.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+pub struct UpdateListingCapabilitiesVO {
+    pub edit: ListingCapabilityAudience,
+    pub reply: ListingCapabilityAudience,
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub struct ListingsVO {
@@ -41,6 +68,8 @@ pub struct ListingsVO {
     pub description: String,
     pub content: String,
     pub banners: Vec<ResourceVO>,
+    /// Effective audiences allowed to edit and reply to this listing.
+    pub capabilities: ListingCapabilitiesVO,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -200,6 +229,41 @@ mod query_tests {
         assert_eq!(
             serde_json::from_value::<ListingsQuery>(json).unwrap(),
             semantic
+        );
+    }
+
+    #[test]
+    fn listing_capabilities_use_snake_case_audiences() {
+        let capabilities = ListingCapabilitiesVO {
+            edit: ListingCapabilityAudience::Administrators,
+            reply: ListingCapabilityAudience::Everyone,
+        };
+        let value = serde_json::to_value(capabilities).unwrap();
+        assert_eq!(
+            value,
+            serde_json::json!({
+                "edit": "administrators",
+                "reply": "everyone"
+            })
+        );
+        assert_eq!(
+            serde_json::from_value::<ListingCapabilitiesVO>(value).unwrap(),
+            capabilities
+        );
+    }
+
+    #[test]
+    fn update_listing_capabilities_uses_the_same_wire_shape() {
+        let update = UpdateListingCapabilitiesVO {
+            edit: ListingCapabilityAudience::Everyone,
+            reply: ListingCapabilityAudience::Administrators,
+        };
+        assert_eq!(
+            serde_json::to_value(update).unwrap(),
+            serde_json::json!({
+                "edit": "everyone",
+                "reply": "administrators"
+            })
         );
     }
 

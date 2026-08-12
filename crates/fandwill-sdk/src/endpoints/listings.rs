@@ -2,8 +2,8 @@ use reqwest::Method;
 
 use fandwill_vo::{
     listings::{
-        BookmarkVO, CreateListingVO, ListingVersionVO, ListingsVO, UpdateListingVO,
-        UpdateListingVersionStatusVO,
+        BookmarkVO, CreateListingVO, ListingCapabilitiesVO, ListingVersionVO, ListingsVO,
+        UpdateListingCapabilitiesVO, UpdateListingVO, UpdateListingVersionStatusVO,
     },
     validation::ListingsVOWithValidation,
 };
@@ -49,6 +49,18 @@ impl FandwillClient {
     pub async fn delete_listing(&self, id: &str) -> Result<(), Error> {
         let builder = self.request(Method::DELETE, &format!("listings/{id}"))?;
         self.send_empty(builder).await
+    }
+
+    /// Updates the edit and reply audiences for a listing as an administrator.
+    pub async fn update_listing_capabilities(
+        &self,
+        id: &str,
+        body: &UpdateListingCapabilitiesVO,
+    ) -> Result<ListingCapabilitiesVO, Error> {
+        let builder = self
+            .request(Method::PATCH, &format!("listings/{id}/capabilities"))?
+            .json(body);
+        self.send_json(builder).await
     }
 
     pub async fn get_bookmark(&self, id: &str) -> Result<BookmarkVO, Error> {

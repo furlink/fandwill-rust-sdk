@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **`fandwill-vo`** — `ReviewsVO` gains `like_count`, `viewer_liked`, and `created_at` fields (constructors must now supply all three).
 - **`fandwill-vo`** — `RootLimits` gains the required `max_image_pixels` field (constructors must now supply it).
+- **`fandwill-vo`** — `ListingsVO` gains the required `capabilities` field describing its edit and reply audiences.
 
 ### Added
 
@@ -18,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`fandwill-vo`** — `RootLimits` exposes `max_image_pixels` so clients can preflight decoded image dimensions.
 - **`fandwill-vo`** — `UserCapabilitiesVO` describes the `GET /users/me/capabilities` response.
 - **`fandwill-sdk`** — `get_my_capabilities` covers `GET /users/me/capabilities`.
+- **`fandwill-vo`** — listing capability audience, response, and administrator update request contracts.
+- **`fandwill-sdk`** — `update_listing_capabilities` covers administrator `PATCH /listings/{id}/capabilities` updates.
 
 ## [0.4.0] - 2026-08-04
 

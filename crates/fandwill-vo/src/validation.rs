@@ -40,6 +40,7 @@ mod tests {
             "description": "Description",
             "content": "Content",
             "banners": [],
+            "capabilities": {"edit": "administrators", "reply": "everyone"},
             "created_at": "2026-08-04T00:00:00Z",
             "updated_at": "2026-08-04T00:00:00Z",
             "markdown_validation": [{"level": "warning"}]

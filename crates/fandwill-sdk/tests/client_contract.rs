@@ -11,7 +11,7 @@ use fandwill_sdk::{
     Error, FandwillClient, NotificationsQuery, PaginationParams, ReviewFilter,
     fandwill_vo::{
         collections::AddToCollectionRequest,
-        listings::CreateListingVO,
+        listings::{CreateListingVO, ListingCapabilityAudience, UpdateListingCapabilitiesVO},
         reviews::{CreateReplyVO, CreateReviewVO},
     },
 };
@@ -162,7 +162,7 @@ async fn listing_create_sends_json_and_keeps_markdown_validation() {
     let server = MockServer::start(
         "200 OK",
         &[("Content-Type", "application/json")],
-        r#"{"id":"listing","created_by":"user","title":"Title","description":"Description","content":"Content","banners":[],"created_at":"2026-08-04T00:00:00Z","updated_at":"2026-08-04T00:00:00Z","markdown_validation":[{"level":"warning"}]}"#,
+        r#"{"id":"listing","created_by":"user","title":"Title","description":"Description","content":"Content","banners":[],"capabilities":{"edit":"administrators","reply":"everyone"},"created_at":"2026-08-04T00:00:00Z","updated_at":"2026-08-04T00:00:00Z","markdown_validation":[{"level":"warning"}]}"#,
     );
     let client = FandwillClient::new(&server.base_url).unwrap();
     let body = CreateListingVO {
@@ -174,6 +174,10 @@ async fn listing_create_sends_json_and_keeps_markdown_validation() {
 
     let response = client.add_listing(&body).await.unwrap();
     assert_eq!(response.inner.id, "listing");
+    assert_eq!(
+        response.inner.capabilities.edit,
+        ListingCapabilityAudience::Administrators
+    );
     assert_eq!(response.markdown_validation.len(), 1);
 
     let request = server.finish();
@@ -304,6 +308,7 @@ async fn added_endpoint_methods_and_paths_match_the_openapi_contract() {
     const ROOT: &str = r#"{"start_at":"2026-08-04T00:00:00Z","version":"0.1.0","limits":{"max_upload_bytes":1024,"max_image_pixels":25000000}}"#;
     const PAGED_EMPTY: &str = r#"{"items":[],"page_info":{"has_next":false,"total":0}}"#;
     const BOOKMARK: &str = r#"{"listing_id":"listing","created_at":"2026-08-04T00:00:00Z"}"#;
+    const LISTING_CAPABILITIES: &str = r#"{"edit":"administrators","reply":"everyone"}"#;
     const CREATED_RESOURCE: &str = r#"{"id":"resource","upload":{"url":"https://uploads.example.test/","method":"POST","fields":{},"max_bytes":1024,"expires_in_secs":60}}"#;
     const RESOURCE: &str = r#"{"id":"resource","mime_type":null,"hash":null,"size_bytes":null,"created_at":"2026-08-04T00:00:00Z"}"#;
     const REVIEW: &str = r#"{"id":"review","created_by":"user","listing_id":"listing","content":"Content","like_count":0,"viewer_liked":false,"created_at":"2026-08-04T00:00:00Z"}"#;
@@ -316,6 +321,21 @@ async fn added_endpoint_methods_and_paths_match_the_openapi_contract() {
     const NOTIFICATION: &str = r#"{"id":"notification","actor_id":null,"payload":{"kind":"system","data":{"title":"Title","body":"Body","action":null}},"created_at":"2026-08-04T00:00:00Z","read_at":null}"#;
 
     let _ = assert_json_contract!(client, "GET", "/", ROOT, client.root());
+    let update_listing_capabilities = UpdateListingCapabilitiesVO {
+        edit: ListingCapabilityAudience::Everyone,
+        reply: ListingCapabilityAudience::Administrators,
+    };
+    let request = assert_json_contract!(
+        client,
+        "PATCH",
+        "/listings/listing/capabilities",
+        LISTING_CAPABILITIES,
+        client.update_listing_capabilities("listing", &update_listing_capabilities)
+    );
+    assert_eq!(
+        serde_json::from_str::<serde_json::Value>(request_body(&request)).unwrap(),
+        serde_json::json!({ "edit": "everyone", "reply": "administrators" })
+    );
     let _ = assert_json_contract!(
         client,
         "GET",

@@ -2,7 +2,7 @@
 
 Async HTTP client for the **Fandwill** API. Request and response types are re-exported through [`fandwill_vo`](https://docs.rs/fandwill-vo), so consumers do not need a separate direct dependency.
 
-The client covers the complete public OpenAPI surface: metadata, authentication, listings and bookmarks, resources, reviews and replies, users and collections, and notifications.
+The client covers the complete public OpenAPI surface: metadata, authentication, listings and bookmarks, listing capability administration, resources, reviews and replies, users and collections, and notifications.
 
 ## Installation
 

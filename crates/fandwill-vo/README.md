@@ -28,7 +28,7 @@ fandwill-vo = { version = "0.4", default-features = false }
 | ------------- | -------------------------------------------------------------- |
 | `auth`        | `SignUpVO`, `SignInVO`, `SignUpResponseVO`, `SignInResponseVO` |
 | `collections` | `AddToCollectionRequest`, `CollectionEntryVO`                  |
-| `listings`    | `CreateListingVO`, `ListingsVO`, `ListingsQuery`, `SearchMode` |
+| `listings`    | `ListingsVO`, `ListingCapabilitiesVO`, `UpdateListingCapabilitiesVO`, `ListingsQuery` |
 | `pagination`  | `PaginationParams`, `PageInfo`, `PagedResponse<T>`             |
 | `users`       | `UsersVO`, `UserCapabilitiesVO`                                |
 | `resources`   | `ResourceVO`, `ResourceUploadVO`, `CreateResourceVO`           |
