@@ -283,10 +283,7 @@ mod query_tests {
 
         let update: UpdateListingCapabilitiesVO =
             serde_json::from_value(serde_json::json!({ "edit": "administrators" })).unwrap();
-        assert_eq!(
-            update.edit,
-            Some(ListingCapabilityAudience::Administrators)
-        );
+        assert_eq!(update.edit, Some(ListingCapabilityAudience::Administrators));
         assert_eq!(update.reply, None);
     }
 

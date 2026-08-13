@@ -11,7 +11,7 @@ Rust value objects and an async HTTP client for the **Fandwill** platform API.
 
 ```toml
 [dependencies]
-fandwill-sdk = "0.4"
+fandwill-sdk = "0.5"
 ```
 
 The backend and SDK should use the same `fandwill-vo` version when a payload contract changes. The SDK re-exports the value-object crate as `fandwill_sdk::fandwill_vo`.

@@ -8,13 +8,13 @@ Use the **same crate version** in the Fandwill backend, future Rust SDK, and any
 
 ```toml
 [dependencies]
-fandwill-vo = "0.4"
+fandwill-vo = "0.5"
 ```
 
 Serde only (no validation or OpenAPI derives):
 
 ```toml
-fandwill-vo = { version = "0.4", default-features = false }
+fandwill-vo = { version = "0.5", default-features = false }
 ```
 
 | Feature  | Default | Description                            |

@@ -8,7 +8,7 @@ The client covers the complete public OpenAPI surface: metadata, authentication,
 
 ```toml
 [dependencies]
-fandwill-sdk = "0.4"
+fandwill-sdk = "0.5"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 ```
 
@@ -56,7 +56,7 @@ Successful JSON responses are deserialized from the API's flattened payload shap
 
 Non-success responses remain available as `Error::Status { status, body }`. For the documented JSON error shape, `Error::api_error()` returns a typed `ApiError { code, msg }` while preserving the original status and body.
 
-`get_resource` returns the presigned target from the API's `302 Location` header without downloading the object.
+`get_resource` returns the presigned target from the API's `303 See Other` response without downloading the object.
 
 ## License
 

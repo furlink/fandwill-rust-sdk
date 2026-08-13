@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-13
+
 ### Breaking
 
 - **`fandwill-vo`** — `ReviewsVO` gains `like_count`, `viewer_liked`, and `created_at` fields (constructors must now supply all three).
@@ -25,6 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`fandwill-sdk`** — `update_listing_capabilities` covers administrator `PATCH /listings/{id}/capabilities` updates.
 - **`fandwill-vo`** — `UpdateUserProfileVO` describes partial profile updates with a validated optional display name.
 - **`fandwill-sdk`** — `update_me` covers `PATCH /users/me`; `get_me` and `get_user` now return `UserVO`.
+
+### Changed
+
+- **`fandwill-sdk`** — listing capability update documentation and contract coverage now reflect partial `PATCH` semantics.
+- **`fandwill-sdk`** — resource download documentation and contract tests now match the backend's `303 See Other` redirect.
 
 ## [0.4.0] - 2026-08-04
 
@@ -122,7 +129,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `ToSchema` and field attributes apply only when the corresponding feature is
   enabled. Use `default-features = false` for a serde-only dependency.
 
-[Unreleased]: https://github.com/furlink/fandwill-rust-sdk/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/furlink/fandwill-rust-sdk/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/furlink/fandwill-rust-sdk/releases/tag/v0.5.0
 [0.4.0]: https://github.com/furlink/fandwill-rust-sdk/releases/tag/v0.4.0
 [0.3.0]: https://github.com/furlink/fandwill-rust-sdk/releases/tag/v0.3.0
 [0.2.0]: https://github.com/furlink/fandwill-rust-sdk/releases/tag/v0.2.0

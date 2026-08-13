@@ -51,7 +51,9 @@ impl FandwillClient {
         self.send_empty(builder).await
     }
 
-    /// Updates the edit and reply audiences for a listing as an administrator.
+    /// Updates the supplied listing audiences as an administrator.
+    ///
+    /// An omitted or `null` audience keeps its current value.
     pub async fn update_listing_capabilities(
         &self,
         id: &str,

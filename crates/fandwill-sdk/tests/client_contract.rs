@@ -227,7 +227,7 @@ async fn structured_api_error_is_additive_to_status_and_raw_body() {
 
 #[tokio::test]
 async fn resource_redirect_returns_resolved_location_without_following() {
-    let server = MockServer::start("302 Found", &[("Location", "/objects/file")], "");
+    let server = MockServer::start("303 See Other", &[("Location", "/objects/file")], "");
     let client = FandwillClient::new(&server.base_url)
         .unwrap()
         .with_jwt("secret-token");
@@ -249,19 +249,19 @@ async fn resource_redirect_returns_resolved_location_without_following() {
 
 #[tokio::test]
 async fn resource_redirect_reports_missing_or_invalid_location() {
-    let server = MockServer::start("302 Found", &[], "");
+    let server = MockServer::start("303 See Other", &[], "");
     let client = FandwillClient::new(&server.base_url).unwrap();
 
     let error = client.get_resource("resource").await.unwrap_err();
     assert!(matches!(
         error,
         Error::MissingRedirectLocation {
-            status: StatusCode::FOUND
+            status: StatusCode::SEE_OTHER
         }
     ));
     let _ = server.finish();
 
-    let server = MockServer::start("302 Found", &[("Location", "http://[invalid")], "");
+    let server = MockServer::start("303 See Other", &[("Location", "http://[invalid")], "");
     let client = FandwillClient::new(&server.base_url).unwrap();
     assert!(matches!(
         client.get_resource("resource").await.unwrap_err(),
@@ -324,8 +324,8 @@ async fn added_endpoint_methods_and_paths_match_the_openapi_contract() {
 
     let _ = assert_json_contract!(client, "GET", "/", ROOT, client.root());
     let update_listing_capabilities = UpdateListingCapabilitiesVO {
-        edit: ListingCapabilityAudience::Everyone,
-        reply: ListingCapabilityAudience::Administrators,
+        edit: Some(ListingCapabilityAudience::Everyone),
+        reply: None,
     };
     let request = assert_json_contract!(
         client,
@@ -336,7 +336,7 @@ async fn added_endpoint_methods_and_paths_match_the_openapi_contract() {
     );
     assert_eq!(
         serde_json::from_str::<serde_json::Value>(request_body(&request)).unwrap(),
-        serde_json::json!({ "edit": "everyone", "reply": "administrators" })
+        serde_json::json!({ "edit": "everyone", "reply": null })
     );
     let _ = assert_json_contract!(
         client,
