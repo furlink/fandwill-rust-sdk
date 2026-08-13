@@ -52,11 +52,14 @@ pub struct ListingCapabilitiesVO {
 }
 
 /// Administrator request for changing a listing's capabilities.
+///
+/// Fields that are omitted or `null` keep their current values.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[serde(deny_unknown_fields)]
 pub struct UpdateListingCapabilitiesVO {
-    pub edit: ListingCapabilityAudience,
-    pub reply: ListingCapabilityAudience,
+    pub edit: Option<ListingCapabilityAudience>,
+    pub reply: Option<ListingCapabilityAudience>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -253,10 +256,10 @@ mod query_tests {
     }
 
     #[test]
-    fn update_listing_capabilities_uses_the_same_wire_shape() {
+    fn update_listing_capabilities_serializes_set_fields() {
         let update = UpdateListingCapabilitiesVO {
-            edit: ListingCapabilityAudience::Everyone,
-            reply: ListingCapabilityAudience::Administrators,
+            edit: Some(ListingCapabilityAudience::Everyone),
+            reply: Some(ListingCapabilityAudience::Administrators),
         };
         assert_eq!(
             serde_json::to_value(update).unwrap(),
@@ -265,6 +268,26 @@ mod query_tests {
                 "reply": "administrators"
             })
         );
+    }
+
+    #[test]
+    fn update_listing_capabilities_deserializes_missing_and_null_as_no_change() {
+        for value in [
+            serde_json::json!({}),
+            serde_json::json!({ "edit": null, "reply": null }),
+        ] {
+            let update: UpdateListingCapabilitiesVO = serde_json::from_value(value).unwrap();
+            assert_eq!(update.edit, None);
+            assert_eq!(update.reply, None);
+        }
+
+        let update: UpdateListingCapabilitiesVO =
+            serde_json::from_value(serde_json::json!({ "edit": "administrators" })).unwrap();
+        assert_eq!(
+            update.edit,
+            Some(ListingCapabilityAudience::Administrators)
+        );
+        assert_eq!(update.reply, None);
     }
 
     #[test]
