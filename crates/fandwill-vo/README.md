@@ -30,7 +30,7 @@ fandwill-vo = { version = "0.4", default-features = false }
 | `collections` | `AddToCollectionRequest`, `CollectionEntryVO`                  |
 | `listings`    | `ListingsVO`, `ListingCapabilitiesVO`, `UpdateListingCapabilitiesVO`, `ListingsQuery` |
 | `pagination`  | `PaginationParams`, `PageInfo`, `PagedResponse<T>`             |
-| `users`       | `UsersVO`, `UserCapabilitiesVO`                                |
+| `users`       | `UserVO`, `UpdateUserProfileVO`, `UserCapabilitiesVO`          |
 | `resources`   | `ResourceVO`, `ResourceUploadVO`, `CreateResourceVO`           |
 | `reviews`     | `CreateReviewVO`, `ReviewReplyVO`, `ReviewsVO`, `ReviewFilter` |
 | `meta`        | `RootResponse`, `RootLimits`                                   |

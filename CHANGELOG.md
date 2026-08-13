@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`fandwill-vo`** — `ReviewsVO` gains `like_count`, `viewer_liked`, and `created_at` fields (constructors must now supply all three).
 - **`fandwill-vo`** — `RootLimits` gains the required `max_image_pixels` field (constructors must now supply it).
 - **`fandwill-vo`** — `ListingsVO` gains the required `capabilities` field describing its edit and reply audiences.
+- **`fandwill-vo`** — `UsersVO { id, sub }` is replaced by `UserVO { id, display_name, created_at }`; the IAM subject is no longer part of the public profile contract.
 
 ### Added
 
@@ -21,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`fandwill-sdk`** — `get_my_capabilities` covers `GET /users/me/capabilities`.
 - **`fandwill-vo`** — listing capability audience, response, and administrator update request contracts.
 - **`fandwill-sdk`** — `update_listing_capabilities` covers administrator `PATCH /listings/{id}/capabilities` updates.
+- **`fandwill-vo`** — `UpdateUserProfileVO` describes partial profile updates with a validated optional display name.
+- **`fandwill-sdk`** — `update_me` covers `PATCH /users/me`; `get_me` and `get_user` now return `UserVO`.
 
 ## [0.4.0] - 2026-08-04
 

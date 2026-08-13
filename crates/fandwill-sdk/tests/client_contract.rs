@@ -13,6 +13,7 @@ use fandwill_sdk::{
         collections::AddToCollectionRequest,
         listings::{CreateListingVO, ListingCapabilityAudience, UpdateListingCapabilitiesVO},
         reviews::{CreateReplyVO, CreateReviewVO},
+        users::UpdateUserProfileVO,
     },
 };
 use reqwest::StatusCode;
@@ -314,7 +315,8 @@ async fn added_endpoint_methods_and_paths_match_the_openapi_contract() {
     const REVIEW: &str = r#"{"id":"review","created_by":"user","listing_id":"listing","content":"Content","like_count":0,"viewer_liked":false,"created_at":"2026-08-04T00:00:00Z"}"#;
     const REVIEW_WITH_VALIDATION: &str = r#"{"id":"review","created_by":"user","listing_id":"listing","content":"Content","like_count":0,"viewer_liked":false,"created_at":"2026-08-04T00:00:00Z","markdown_validation":[]}"#;
     const REPLY_WITH_VALIDATION: &str = r#"{"id":"reply","review_id":"review","parent_reply_id":null,"created_by":"user","content":"Reply","created_at":"2026-08-04T00:00:00Z","markdown_validation":[]}"#;
-    const USER: &str = r#"{"id":"user","sub":"iam-subject"}"#;
+    const USER: &str =
+        r#"{"id":"user","display_name":"Alice","created_at":"2026-08-11T00:00:00Z"}"#;
     const USER_CAPABILITIES: &str = r#"{"is_admin":true}"#;
     const COLLECTION: &str =
         r#"{"id":"entry","resource_id":"resource","created_at":"2026-08-04T00:00:00Z"}"#;
@@ -434,6 +436,20 @@ async fn added_endpoint_methods_and_paths_match_the_openapi_contract() {
     );
 
     let _ = assert_json_contract!(client, "GET", "/users/me", USER, client.get_me());
+    let update_profile = UpdateUserProfileVO {
+        display_name: Some("Alice".into()),
+    };
+    let request = assert_json_contract!(
+        client,
+        "PATCH",
+        "/users/me",
+        USER,
+        client.update_me(&update_profile)
+    );
+    assert_eq!(
+        serde_json::from_str::<serde_json::Value>(request_body(&request)).unwrap(),
+        serde_json::json!({ "display_name": "Alice" })
+    );
     let _ = assert_json_contract!(
         client,
         "GET",

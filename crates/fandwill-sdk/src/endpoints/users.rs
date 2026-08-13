@@ -5,14 +5,19 @@ use fandwill_vo::{
     listings::ListingsVO,
     pagination::{PagedResponse, PaginationParams},
     reviews::ReviewsVO,
-    users::{UserCapabilitiesVO, UsersVO},
+    users::{UpdateUserProfileVO, UserCapabilitiesVO, UserVO},
 };
 
 use crate::{client::FandwillClient, error::Error};
 
 impl FandwillClient {
-    pub async fn get_me(&self) -> Result<UsersVO, Error> {
+    pub async fn get_me(&self) -> Result<UserVO, Error> {
         let builder = self.request(Method::GET, "users/me")?;
+        self.send_json(builder).await
+    }
+
+    pub async fn update_me(&self, body: &UpdateUserProfileVO) -> Result<UserVO, Error> {
+        let builder = self.request(Method::PATCH, "users/me")?.json(body);
         self.send_json(builder).await
     }
 
@@ -64,7 +69,7 @@ impl FandwillClient {
         self.send_json(builder).await
     }
 
-    pub async fn get_user(&self, id: &str) -> Result<UsersVO, Error> {
+    pub async fn get_user(&self, id: &str) -> Result<UserVO, Error> {
         let builder = self.request(Method::GET, &format!("users/{id}"))?;
         self.send_json(builder).await
     }
