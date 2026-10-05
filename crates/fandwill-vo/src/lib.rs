@@ -12,6 +12,7 @@
 
 pub mod auth;
 pub mod collections;
+pub mod drafts;
 pub mod listings;
 pub mod meta;
 pub mod notifications;

@@ -86,10 +86,16 @@ pub enum NotificationPayloadVO {
     ListingPublished {
         listing_id: String,
         listing_version_id: String,
+        /// Optional administrator note attached to the published version.
+        #[serde(default)]
+        comment: Option<String>,
     },
     ListingArchived {
         listing_id: String,
         listing_version_id: String,
+        /// Optional administrator note attached to the archived version.
+        #[serde(default)]
+        comment: Option<String>,
     },
     ListingPendingReview {
         listing_id: String,
@@ -162,17 +168,19 @@ mod tests {
                 NotificationPayloadVO::ListingPublished {
                     listing_id: "listing".into(),
                     listing_version_id: "version".into(),
+                    comment: None,
                 },
                 "listing_published",
-                serde_json::json!({ "listing_id": "listing", "listing_version_id": "version" }),
+                serde_json::json!({ "listing_id": "listing", "listing_version_id": "version", "comment": null }),
             ),
             (
                 NotificationPayloadVO::ListingArchived {
                     listing_id: "listing".into(),
                     listing_version_id: "version".into(),
+                    comment: None,
                 },
                 "listing_archived",
-                serde_json::json!({ "listing_id": "listing", "listing_version_id": "version" }),
+                serde_json::json!({ "listing_id": "listing", "listing_version_id": "version", "comment": null }),
             ),
             (
                 NotificationPayloadVO::ListingPendingReview {
@@ -247,6 +255,31 @@ mod tests {
         ] {
             assert_payload_roundtrip(payload, kind, data);
         }
+    }
+
+    #[test]
+    fn notification_comments_roundtrip_and_older_payloads_default_to_none() {
+        let payload = NotificationPayloadVO::ListingPublished {
+            listing_id: "listing".into(),
+            listing_version_id: "version".into(),
+            comment: Some("Looks good".into()),
+        };
+        let value = serde_json::to_value(&payload).unwrap();
+        assert_eq!(value["data"]["comment"], "Looks good");
+        assert_eq!(
+            serde_json::from_value::<NotificationPayloadVO>(value).unwrap(),
+            payload
+        );
+
+        let legacy: NotificationPayloadVO = serde_json::from_value(serde_json::json!({
+            "kind": "listing_archived",
+            "data": { "listing_id": "listing", "listing_version_id": "version" }
+        }))
+        .unwrap();
+        assert!(matches!(
+            legacy,
+            NotificationPayloadVO::ListingArchived { comment: None, .. }
+        ));
     }
 
     #[test]

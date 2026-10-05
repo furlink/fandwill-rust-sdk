@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking
+
+- **`fandwill-vo`** — `RootResponse` adds invitation and trusted-image-domain fields, and its constructor accepts them.
+- **`fandwill-vo`** — `ResourceVO` adds optional blurhash and display-dimension fields.
+- **`fandwill-vo`** — published and archived notification payloads add an optional `comment` field.
+
+### Added
+
+- **`fandwill-vo`** — draft response, create-request, and update-request types in the `drafts` module.
+
 ## [0.5.0] - 2026-08-13
 
 ### Breaking
