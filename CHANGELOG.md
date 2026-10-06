@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`fandwill-vo`** — `RootResponse` adds invitation and trusted-image-domain fields, and its constructor accepts them.
 - **`fandwill-vo`** — `ResourceVO` adds optional blurhash and display-dimension fields.
 - **`fandwill-vo`** — published and archived notification payloads add an optional `comment` field.
+- **`fandwill-vo`** — `ListingsVO` gains a `bookmark_count` field (constructors must now supply it).
 
 ### Added
 

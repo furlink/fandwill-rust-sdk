@@ -73,6 +73,11 @@ pub struct ListingsVO {
     pub banners: Vec<ResourceVO>,
     /// Effective audiences allowed to edit and reply to this listing.
     pub capabilities: ListingCapabilitiesVO,
+    /// Number of distinct users who currently bookmark this listing.
+    ///
+    /// Defaults to zero when absent so older payloads remain deserializable.
+    #[serde(default)]
+    pub bookmark_count: u64,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -299,6 +304,42 @@ mod query_tests {
         assert_eq!(
             serde_json::from_value::<BookmarkVO>(value).unwrap(),
             bookmark
+        );
+    }
+
+    #[test]
+    fn listings_vo_defaults_bookmark_count_when_absent() {
+        let without_count = serde_json::json!({
+            "id": "listing",
+            "created_by": null,
+            "title": "title",
+            "description": "description",
+            "content": "content",
+            "banners": [],
+            "capabilities": { "edit": "everyone", "reply": "everyone" },
+            "created_at": "2026-08-04T00:00:00Z",
+            "updated_at": "2026-08-04T00:00:00Z",
+        });
+        let vo: ListingsVO = serde_json::from_value(without_count).unwrap();
+        assert_eq!(vo.bookmark_count, 0);
+
+        let with_count = serde_json::json!({
+            "id": "listing",
+            "created_by": null,
+            "title": "title",
+            "description": "description",
+            "content": "content",
+            "banners": [],
+            "capabilities": { "edit": "everyone", "reply": "everyone" },
+            "bookmark_count": 7,
+            "created_at": "2026-08-04T00:00:00Z",
+            "updated_at": "2026-08-04T00:00:00Z",
+        });
+        let vo: ListingsVO = serde_json::from_value(with_count).unwrap();
+        assert_eq!(vo.bookmark_count, 7);
+        assert_eq!(
+            serde_json::to_value(&vo).unwrap()["bookmark_count"],
+            serde_json::json!(7)
         );
     }
 }
